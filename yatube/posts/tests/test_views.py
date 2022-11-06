@@ -283,10 +283,6 @@ class PostPagesTest(TestCase):
         """Проверяем, что пользователь не может подписаться
         на самого себя"""
         Follow.objects.all().delete()
-        data = {
-            'user': self.user.id,
-            'author': self.user_to_follow.id,
-        }
         # user подписывается на самого себя
         self.authorized_client.get(
             reverse(
@@ -301,7 +297,6 @@ class PostPagesTest(TestCase):
             EXPECTED_FOLLOWERS,
             f'Ожидалось, что будет {EXPECTED_FOLLOWERS} записей'
         )
-
 
     def test_new_post_available_for_followers(self):
         """Проверяем, что новая запись пользователя появляется

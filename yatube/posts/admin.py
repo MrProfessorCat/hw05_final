@@ -23,6 +23,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('text',)
     list_filter = ('created', 'author')
 
+
 @admin.register(Follow)
 class FollowAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'author')
