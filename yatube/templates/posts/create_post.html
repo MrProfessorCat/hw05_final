@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}
+  {% if is_edit %}
+  Редактировать запись
+  {% else %}
+  Добавить запись
+  {% endif %}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-xl-8 col-lg-10 col-md-10 col-sm-12 p-3">
+      <div class="users-form card">
+        <div class="card-header text-center fs-5 fw-semibold">
+          {% if is_edit %}
+          Редактировать запись
+          {% else %}
+          Добавить запись
+          {% endif %}
+        </div>
+        <div class="card-body">
+          {% include 'includes/errors_check.html' %}
+          {% load user_filters %}
+          
+        <form method="post" enctype="multipart/form-data">
+          {% include 'includes/form.html' %}
+          <div class="text-center">
+              <button type="submit" class="btn btn-secondary fs-5 me-2 mb-2">
+                {% if is_edit %}
+                Сохранить
+                {% else %}
+                Добавить
+                {% endif %}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+
+{% extends "users/users_base.html" %}
+{% block title %}Войти{% endblock %}
+{% block card %}
+  <div class="users-form card">
+    <div class="card-header text-center fs-5 fw-semibold">
+      Войти на сайт
+    </div>
+    <div class="card-body">
+      {% include 'includes/errors_check.html' %}
+
+      <form method="post"
+        {% if action_url %}
+          action="{% url action_url %}"
+        {% endif %}
+      >
+        {% include 'includes/form.html' %}
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-secondary fs-5 me-2 mb-2">
+            Войти
+          </button>
+          <a href="{% url 'users:password_reset_form' %}" class="btn btn-link fs-5 text-secondary">
+            Забыли пароль?
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %} 

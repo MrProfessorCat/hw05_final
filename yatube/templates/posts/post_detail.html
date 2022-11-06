@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}Пост {{post.text|truncatechars:30}} {% endblock %}
+{% block content %}
+  <!-- Post block -->
+  <section class="">
+    <div class="container-fluid">
+      <div class="row g-4">
+
+        <!-- Info block -->
+        <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-12">
+          <div class="position-sticky" style="top: 2rem;">
+            <div class="about-block p-4 mb-3 rounded position-relative text-break">
+              <h4 class="fst-italic">О статье</h4>
+              <ul class="info-list fs-5">
+                <li class="text-muted">
+                  Дата публикации: <span style="color: black">{{ post.pub_date|date:"d E Y" }}</span>
+                </li>
+                {% if post.group %}   
+                  <li class="text-muted">
+                    Группа: <a class="styled-link" href="{% url 'posts:group_list' post.group.slug %}">{{ post.group.title }}</a>
+                  </li>
+                {% endif %}
+                <li class="text-muted">
+                  Автор: <a class="styled-link" href="{% url 'posts:profile' post.author.username %}">{{post.author.get_full_name|default:post.author.username}}</a>
+                </li>
+                <li class="text-muted">
+                  Всего постов автора: <span style="color: black">{{ posts_count }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Post block -->
+        <div class="col-xxl-6 col-xl-9 col-lg-8 col-md-8 col-sm-12">    
+          <article class="blog-post p-4 rounded">
+            {% if post.title %}
+              <h2 class="blog-post-title mb-1 fs-1">{{ post.title }}</h2>
+            {% endif %}
+            <div class="text-center">
+              {% thumbnail post.image "x400" crop="center" upscale=True as im %}
+                <img class="img-fluid rounded" src="{{ im.url }}" alt="Изображение поста">
+              {% endthumbnail %}
+            </div>
+            <hr>
+            <p class="fs-4 text-wrap text-break text-justify"><span style="color:red"><stong>{{ post.text|make_list|slice:":2"|join:"" }}</stong></span>{{ post.text|make_list|slice:"2:"|join:""|linebreaksbr }}</p>
+          </article> 
+        </div>
+        
+        <!-- Comments block -->
+        {% include 'posts/includes/comments.html' %}
+
+      </div>
+    </div>
+  </section>
+{% endblock %}

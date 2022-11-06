@@ -1,0 +1,37 @@
+<!-- templates/includes/post.html -->
+{% load static %}
+{% load thumbnail %}
+
+<!-- Post block --> 
+<div class="blog-post post-block d-flex flex-column col-xl-5 col-md-9 col-sm-12 rounded position-relative">
+  <div class="row g-0 overflow-hidden flex-md-row h-md-250 position-relative h-100">
+    <div class="ps-3 pt-4 pe-1 pb-2 col d-flex flex-column position-static">
+      <!-- post group  -->
+      {% if post.group and not group_posts_page %}
+        <a class="group_link" href="{% url 'posts:group_list' post.group.slug %}">
+          <strong class="post-group d-inline-block mb-2">{{ post.group.title }}</strong>
+        </a>
+      {% endif %}
+      <!-- post title -->
+      {% if post.title %}
+        <h3 class="mb-0">{{ post.title }}</h3>
+      {% endif %}
+      <!-- post published date and author-->
+      <div class="post-date mb-1 text-muted">
+        <p class="mb-0">{{ post.created|date:"d E Y" }}</p>
+        <p>автор: <a class="styled-link" href="{% url 'posts:profile' post.author.username %}">{{ post.author.get_full_name|default:post.author.username }}</a></p>
+      </div>
+      <!-- post text -->
+      <p class="post-text card-text mb-auto text-truncate-container text-justify">{{ post.text|linebreaksbr }}</p>
+    </div>
+    {% thumbnail post.image "800x600" crop="center" upscale=True as im%}
+      <div class="col-md-5 mt-sm-auto mt-md-auto mb-0 p-2 align-middle">
+        <img class="img-fluid rounded" src="{{ im.url }}" alt="Изображение поста">
+      </div>
+    {% endthumbnail %}
+    
+    <div class="mb-4 mt-auto ms-3">
+      <a href="{% url 'posts:post_detail' post.pk %}" class="styled-link">Читать пост</a>
+    </div>
+  </div>
+</div>

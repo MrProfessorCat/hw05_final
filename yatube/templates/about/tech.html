@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Технологии{% endblock %}
+{% block content %}
+  <section class="mt-2 mb-4 mx-2">
+    <div class="container about-author rounded">
+      <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-8 d-flex justify-content-center mt-5 mb-4">
+            <img 
+              class="img-fluid"
+              src="{% static '/img/tech.jpg' %}"
+              width="600"
+              height="auto"
+              alt="Кофе с печеньками"
+            />
+        </div>
+        <div class="col-sm-12 col-md-6 mb-5 text-justify">
+          <p class="fs-3 text">
+            Для создания сего великолепия понадобилось:
+          </p>
+          <ul class="fs-3">
+            <li>Печеньки... много печенек <span>&#x1F96E</span></li>
+            <li><span class="text-decoration-line-through">Кофе <span>&#x2615</span> 2 кг</span> Не пейте кофе, пейте цикорий</li>
+            <li>Годный плейлист, куда без него <span>&#x1F3A7</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

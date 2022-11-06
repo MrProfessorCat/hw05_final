@@ -1,0 +1,29 @@
+{% load static %}
+{% load thumbnail %}
+
+<div class="col-lg-10 col-md-12 col-sm-12 mb-4">    
+    <article class="blog-post p-4 rounded">
+      {% if post.title %}
+        <h2 class="blog-post-title mb-1 fs-1">{{ post.title }}</h2>
+      {% endif %}
+      {% if editable %}
+      <a class="styled-link" href="{% url 'posts:post_edit' post.id %}"><img src="{% static "img/icons/edit.png" %}"></a>
+      {% endif %}
+      
+      <div class="text-muted">
+        <p class="blog-post-meta fs-5 mb-0">опубликовано {{ post.created|date:"d E Y" }}</p>
+        <p class="blog-post-meta fs-5 mb-0">автор статьи: <a class="styled-link" href="#">{% if post.author.get_full_name %}{{ post.author.get_full_name }}{% else %}{{ post.author.username }}{% endif %}</a></p>
+        {% if post.group and not group_posts_page %}
+          <p class="blog-post-meta fs-5">группа: <a class="styled-link" href="{% url 'posts:group_list' post.group.slug %}">{{ post.group.title }}</a></p>
+        {% endif %}
+      </div>
+      <hr>
+      <div class="text-center">
+        {% thumbnail post.image "600x400" upscale=True as im %}
+          <img class="img-fluid rounded" src="{{ im.url }}" alt="Изображение поста">
+        {% endthumbnail %}
+      </div>
+      <p class="fs-4 text-wrap text-break text-truncate-container-10 text-justify">{{ post.text|linebreaksbr }}</p>
+      <a class="styled-link fs-5" href="{% url 'posts:post_detail' post.pk %}">читать пост</a>
+    </article> 
+  </div>

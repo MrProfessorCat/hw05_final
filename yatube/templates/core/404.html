@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Custom 404{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center p-2 text-center my-3">
+    <h1>Custom 404</h1>
+    <p class="fs-5">Страницы с адресом <strong>{{ path }}</strong> не существует</p>
+    <a class="fs-5 styled-link" href="{% url 'posts:index' %}">Идите на главную</a>
+  </div>
+</div>
+{% endblock %} 

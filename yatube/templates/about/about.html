@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Об авторе{% endblock %}
+{% block content %}
+  <section class="mt-2 mb-4 mx-2">
+    <div class="container about-author rounded">
+      <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-8 d-flex justify-content-center mt-5 mb-4">
+            <img 
+              class="img-fluid"
+              src="{% static '/img/author.jpg' %}"
+              width="600"
+              height="auto"
+              alt="Фотография автора"
+            />
+        </div>
+        <div class="col-sm-12 col-md-6 mb-5 text-justify">
+          <p class="fs-3 text">
+            Дизайнер, фронтендер, бекендер - кот<span>&#x1F63A</span> Бася... но он устал<span>&#x1F4A4</span>
+            А вообще очень любит тыг-дык по клавиатуре. Основная задача - наступить на пробел<span>&#x1F608</span>
+            Миссия считается выполненной на 5 звезд<span>&#x1F31F</span>, если в это время хозяева смотрят кино.
+          </p>
+          <a class="fs-3 styled-link" href="https://github.com/MrProfessorCat" target="_blank">Ссылка на мой канал GIT</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,69 @@
+<!-- templates/includes/header.html -->
+{% load static %}
+
+<nav class="navbar navbar-expand-xl mb-2 shadow">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'posts:index' %}">
+      <img src="{% static 'img/logo.png' %}" width="40" height="40" class="d-inline-block align-top" alt="">
+      <span class="logo" style="color:red">Ya</span>tube</a>
+    </a>
+    <button class="navbar-toggler border border-3 border-dark" style="--bs-border-opacity: .7;" type="button" data-bs-toggle="collapse" data-bs-target="#navbars" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <!-- Блок навигации по сайту -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbars">
+      <ul class="navbar-nav">
+        {% url 'posts:index' as url %}
+        <li class="nav-item m-auto">
+          <a class="nav-link {% if request.path == url %}nav-link-current{% endif %}" href="{% url 'posts:index' %}">Главная</a>
+        </li>
+        {% url 'about:author' as url %}
+        <li class="nav-item m-auto">
+          <a class="nav-link {% if request.path == url %}nav-link-current{% endif %}" href="{% url 'about:author' %}">Об авторе</a>
+        </li>
+        {% url 'about:tech' as url %}
+        <li class="nav-item m-auto">
+          <a class="nav-link {% if request.path == url %}nav-link-current{% endif %}" href="{% url 'about:tech' %}">Технологии</a>
+        </li>
+        {% if user.is_authenticated %}
+        {% url 'posts:post_create' as url %}
+        <li class="nav-item m-auto">
+          <a class="nav-link {% if request.path == url %}nav-link-current{% endif %}" href="{% url 'posts:post_create' %}">Новая запись</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <!-- Блок авторизации -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbars">
+      <ul class="navbar-nav">
+        {% if user.is_authenticated %}
+        {% url 'users:password_change' as url %}
+        <li class="nav-item m-auto">
+          <a class="nav-link {% if request.path == url %}nav-link-current{% endif %}" href="{% url 'users:password_change' %}">Сменить пароль</a>
+        </li>
+        {% endif %}
+        {% url 'users:login' as url %}
+        <li class="nav-item m-auto">
+          {% if user.is_authenticated %}
+            <a class="nav-link {% if request.path == url %}nav-link-current{% endif %}" href="{% url 'users:logout' %}">Выйти</a>
+          {% else %}
+            <a class="nav-link {% if request.path == url %}nav-link-current{% endif %}" href="{% url 'users:login' %}">Войти</a>
+          {% endif %}
+        </li>
+        {% url 'users:signup' as url %}
+        {% if not user.is_authenticated %}
+        <li class="nav-item m-auto">
+          <a class="nav-link {% if request.path == url %}nav-link-current{% endif %}" href="{% url 'users:signup' %}">Регистрация</a>
+        </li>
+        {% endif %}
+      </ul>
+      {% if user.is_authenticated %}
+      <div class="text text-end fs-5">
+        Пользователь: <a class="styled-link" href="{% url 'posts:profile' user.username %}"><strong>{{ user.username }}</strong></a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</nav>  

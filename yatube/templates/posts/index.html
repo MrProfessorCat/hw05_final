@@ -1,0 +1,22 @@
+<!-- templates/posts/index.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load cache %}
+
+{% block title %}
+  Последние обновления на сайте
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center p-2">
+    {% include 'posts/includes/switcher.html' %}
+    {% cache cache_time index_page %}
+      {% for post in page_obj %}
+        {% include 'posts/includes/post.html' %}
+      {% endfor %}
+    {% endcache %} 
+  </div>
+</div>
+{% include 'posts/includes/paginator.html' %}
+{% endblock %}

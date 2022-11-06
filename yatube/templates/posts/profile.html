@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title%}Профайл пользователя {{author.get_full_name}}{% endblock %}
+{% block content %}
+{% if page_obj %}
+  <div class="container">
+    <div class="row justify-content-center p-2">
+      <!-- About author -->
+      <section class="col-lg-10 col-md-12 col-sm-12 mb-4">
+        <div class="blog-post p-4 rounded ">
+          <p class="fs-3 text text-center mb-0">Все посты пользователя <strong>«{{author.get_full_name|default:author.username}}»</strong></p>
+          <p class="fs-3 text text-center mb-0">Всего постов: {{ page_obj.paginator.count }}</p>
+          <div class="text-center mt-4">
+            <!-- Не отображать кнопки для самого себя и для неавторизованного пользователя -->
+            {% if not editable and user.is_authenticated %}
+              {% if following %}
+                <a class="btn btn-secondary fs-5 me-2 mb-2" href="{% url 'posts:profile_unfollow' author.username %}" role="button">Отписаться</a>
+              {% else %}
+                <a class="btn btn-danger fs-5 me-2 mb-2" href="{% url 'posts:profile_follow' author.username %}" role="button">Подписаться</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </section>
+
+      {% for post in page_obj %}
+        {% include 'posts/includes/big_post.html' with editable=editable %}
+        {% comment %} 
+        {% if not forloop.last %}
+          <hr />
+        {% endif %}
+        {% endcomment %}
+      {% endfor %}
+
+      {% include 'posts/includes/paginator.html' %}
+    </div>
+  </div>
+{% else %}
+{% endif %}
+{% endblock %}

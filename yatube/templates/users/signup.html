@@ -1,0 +1,21 @@
+<!-- templates/users/signup.html -->
+{% extends "users/users_base.html" %}
+{% block title %}Зарегистрироваться{% endblock %}
+{% block card %}
+  <div class="users-form card">
+    <div class="card-header text-center fs-5 fw-semibold">
+      Войти на сайт
+    </div>
+    <div class="card-body">
+      {% include 'includes/errors_check.html' %}
+      <form method="post" action="{% url 'users:signup' %}">
+        {% include 'includes/form.html' %}
+        <div class="text-center">
+          <button type="submit" class="btn btn-secondary fs-5 me-2 mb-2">
+            Зарегистрироваться
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %} 

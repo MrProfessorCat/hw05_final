@@ -1,0 +1,25 @@
+{% load user_filters %}
+
+<div class="col-xxl-3 col-xl-8 col-lg-8 col-md-12 col-sm-12 mx-auto">
+  <div class="position-sticky" style="top: 2rem;">
+    <div class="about-block p-4 mb-3 rounded">
+      <h4 class="fst-italic mb-4">Комментарии</h4>
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'posts:add_comment' post.id %}" class="mb-5">
+          {% include 'includes/form.html' %}
+          <button type="submit" class="btn btn-danger">Отправить</button>
+        </form>
+      {% endif %}
+
+      {% for comment in comments %}
+        <div class="about-block p-4 mb-3 rounded text-break">
+          <a href="{% url 'posts:profile' comment.author.username %}"><strong class="post-group d-inline-block">{{ comment.author.get_full_name|default:comment.author.username }}</strong></a>
+          <div class="post-date text-muted">{{ comment.created|date:"d E Y H:i" }}</div>
+          <hr class="mt-0">
+          <p class="post-text card-text mb-auto text-justify">{{ comment.text|linebreaksbr }}</p>
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
