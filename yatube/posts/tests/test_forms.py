@@ -163,6 +163,25 @@ class PostCreateFormTests(TestCase):
             'Ожидалось, что автор поста не изменится'
         )
 
+    def test_authorized_allowed_comments(self):
+        """Проверяем, что авторизованный пользователь может
+        комментировать посты"""
+        Comment.objects.all().delete()
+        self.authorized_client.post(
+            reverse(
+                'posts:add_comment',
+                kwargs={'post_id': self.post.id}
+            ),
+            data={'text': 'Текст комментария'}
+        )
+
+        expected_data = {
+            'post': self.post.id,
+            'author': self.user.id,
+            'text': 'Текст комментария'
+        }
+        self.match_model_fields(Comment.objects.first(), expected_data)
+
     def test_guest_denied_comments(self):
         """Проверяем, что неавторизованный пользователь не может
         комментировать посты"""

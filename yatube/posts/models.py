@@ -81,8 +81,6 @@ class Post(CreatedModel):
 
 
 class Comment(CreatedModel):
-    LETTERS_LIMIT = 15
-
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
@@ -108,7 +106,7 @@ class Comment(CreatedModel):
         verbose_name_plural = 'Комментарии'
 
     def __str__(self):
-        return self.text[:self.LETTERS_LIMIT]
+        return self.text
 
 
 class Follow(models.Model):
@@ -130,3 +128,13 @@ class Follow(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
+        constraints = (
+            models.UniqueConstraint(
+                fields=('user', 'author'),
+                name='follow_unique'
+            ),
+            models.CheckConstraint(
+                check=~models.Q(user=models.F('author')),
+                name='follow_user_author_constraint'
+            )
+        )

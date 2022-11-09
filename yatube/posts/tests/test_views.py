@@ -247,13 +247,8 @@ class PostPagesTest(TestCase):
 
     def test_authorised_user_can_follow(self):
         """Проверяем, что авторизованный пользователь может
-        подписываться на других пользователей и может отписаться"""
+        подписываться на других пользователей"""
 
-        Follow.objects.all().delete()
-        data = {
-            'user': self.user.id,
-            'author': self.user_to_follow.id,
-        }
         # user подписывается на пользователя user_to_follow
         self.authorized_client.get(
             reverse(
@@ -262,7 +257,21 @@ class PostPagesTest(TestCase):
             )
         )
         # Проверяем, что в таблице posts_follow появилась запись
-        self.match_model_fields(Follow.objects.first(), data)
+        self.assertTrue(
+            Follow.objects.filter(
+                user=self.user,
+                author=self.user_to_follow
+            ).exists()
+        )
+
+    def test_authorised_user_can_unfollow(self):
+        """Проверяем, что авторизованный пользователь может
+        отписываться от других пользователей"""
+
+        Follow.objects.create(
+            user=self.user,
+            author=self.user_to_follow
+        )
 
         # user отписывается от пользователя user_to_follow
         self.authorized_client.get(
@@ -271,12 +280,13 @@ class PostPagesTest(TestCase):
                 kwargs={'username': self.user_to_follow.username}
             )
         )
-        # Проверяем, что в таблице posts_follow нет записей
-        EXPECTED_FOLLOWERS = 0
-        self.assertEqual(
-            Follow.objects.count(),
-            EXPECTED_FOLLOWERS,
-            f'Ожидалось, что будет {EXPECTED_FOLLOWERS} записей'
+
+        # Проверяем, что из таблицы posts_follow удалилась запись
+        self.assertFalse(
+            Follow.objects.filter(
+                user=self.user,
+                author=self.user_to_follow
+            ).exists()
         )
 
     def test_user_cannot_follow_himself(self):

@@ -45,11 +45,8 @@ def profile(request, username):
         'author': author,
         'editable': author == request.user,
         'following': (
-            not request.user.is_anonymous
-            and Follow.objects.filter(
-                author=author,
-                user=request.user
-            ).exists()
+            request.user.is_authenticated
+            and author.following.filter(user=request.user).exists()
         )
     }
     return render(request, 'posts/profile.html', context)
@@ -118,13 +115,9 @@ def add_comment(request, post_id):
 
 @login_required
 def follow_index(request):
-    followers = Follow.objects.filter(
-        user=request.user).select_related('author')
-    posts = []
-    for follower in followers:
-        posts.extend(
-            follower.author.posts.select_related('author', 'group')
-        )
+    posts = Post.objects.filter(
+        author__following__user=request.user
+    ).select_related('author', 'group')
     context = {'page_obj': get_page_posts(request.GET.get('page'), posts)}
     return render(request, 'posts/follow.html', context)
 
@@ -132,13 +125,8 @@ def follow_index(request):
 @login_required
 def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
-    if (
-        author != request.user
-        and not Follow.objects.filter(
-            user=request.user,
-            author=author).exists()
-    ):
-        Follow.objects.create(
+    if author != request.user:
+        Follow.objects.get_or_create(
             user=request.user,
             author=author
         )
@@ -147,9 +135,9 @@ def profile_follow(request, username):
 
 @login_required
 def profile_unfollow(request, username):
-    get_object_or_404(
-        Follow,
+    author = get_object_or_404(User, username=username)
+    Follow.objects.filter(
         user=request.user,
-        author=User.objects.get(username=username)
+        author=author
     ).delete()
     return redirect('posts:profile', username=username)
